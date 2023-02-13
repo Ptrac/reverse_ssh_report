@@ -16,6 +16,8 @@ poetry install
 
 poetry run python main.py
 
+chmod +x run.sh
+
 ## Crontab
 
 Let's check for new client or disconnected one every 5 minutes.
