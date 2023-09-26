@@ -26,3 +26,8 @@ crontab -e
 ```
 */5 * * * * /PATH/TO/YOUR/DIRECTORY/run.sh >> ~/cron.log 2>&1
 ```
+
+## Mapping
+
+If you want to provide the device name in your messages, rename the mapping.json_example to mapping.json and update it your devices values.
+

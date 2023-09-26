@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "device": "Remote Device 1",
+        "ssh_port": 1111
+    },
+    {
+        "id": 2,
+        "device": "Remote Device 2",
+        "ssh_port": 2222
+    },
+]

@@ -13,8 +13,8 @@ def get_credentials() -> dict:
         return {}
 
 
-def read_list():
-    filename = os.path.join("clients.json")
+def read_list(file):
+    filename = os.path.join(file)
     try:
         with open(filename, mode="rb") as f:
             return json.load(f)
@@ -45,17 +45,33 @@ for client in returned_output.decode("utf-8").splitlines():
     current_clients.append(int(client.split()[4].split(":")[1]))
 
 
-previous_clients = read_list()
+previous_clients = read_list("clients.json")
+mapping = read_list("mapping.json")
 
 
 for client in current_clients:
     if client not in previous_clients:
-        bot.sendMessage(bot_chatID, f"{client} connected")
+        # check if client is in mapping
+        if mapping:
+            for item in mapping:
+                if item["ssh_port"] == client:
+                    bot.sendMessage(
+                        bot_chatID, f"{item['device']} ({client}) connected"
+                    )
+        else:
+            bot.sendMessage(bot_chatID, f"{client} connected")
 
 
 for client in previous_clients:
     if client not in current_clients:
-        bot.sendMessage(bot_chatID, f"{client} disconnected")
-
+        # check if client is in mapping
+        if mapping:
+            for item in mapping:
+                if item["ssh_port"] == client:
+                    bot.sendMessage(
+                        bot_chatID, f"{item['device']} ({client}) disconnected"
+                    )
+        else:
+            bot.sendMessage(bot_chatID, f"{client} disconnected")
 
 write_list(current_clients)
