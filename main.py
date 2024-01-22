@@ -1,6 +1,7 @@
-import subprocess
 import json
 import os
+import subprocess
+
 import telepot
 
 
@@ -48,29 +49,30 @@ for client in returned_output.decode("utf-8").splitlines():
 previous_clients = read_list("clients.json")
 mapping = read_list("mapping.json")
 
+mapping_dict = {client["ssh_port"]: client for client in mapping}
 
 for client in current_clients:
     if client not in previous_clients:
-        # check if client is in mapping
         if mapping:
-            for item in mapping:
-                if item["ssh_port"] == client:
-                    bot.sendMessage(
-                        bot_chatID, f"{item['device']} ({client}) connected"
-                    )
+            if client in mapping_dict:
+                bot.sendMessage(
+                    bot_chatID, f"{mapping_dict[client]['device']} ({client}) connected"
+                )
+            else:
+                bot.sendMessage(bot_chatID, f"UNKNOWN Client : {client} connected")
         else:
             bot.sendMessage(bot_chatID, f"{client} connected")
 
 
 for client in previous_clients:
     if client not in current_clients:
-        # check if client is in mapping
         if mapping:
-            for item in mapping:
-                if item["ssh_port"] == client:
-                    bot.sendMessage(
-                        bot_chatID, f"{item['device']} ({client}) disconnected"
-                    )
+            if client in mapping_dict:
+                bot.sendMessage(
+                    bot_chatID, f"{mapping_dict[client]['device']} ({client}) disconnected"
+                )
+            else:
+                bot.sendMessage(bot_chatID, f"UNKNOWN Client : {client} disconnected")
         else:
             bot.sendMessage(bot_chatID, f"{client} disconnected")
 
