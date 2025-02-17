@@ -38,13 +38,15 @@ bot = telepot.Bot(bot_token)
 
 current_clients = []
 
-cmd = "ss -ltupnr | grep ip6-localhost:"
+cmd = "ss -ltupnr | grep localhost:"
 returned_output = subprocess.check_output(cmd, shell=True)
 
 
 for client in returned_output.decode("utf-8").splitlines():
-    current_clients.append(int(client.split()[4].split(":")[1]))
+    if "[::]:" in client.split()[5]:
+        current_clients.append(int(client.split()[4].split(":")[1]))
 
+current_clients.sort()
 
 previous_clients = read_list("clients.json")
 mapping = read_list("mapping.json")
