@@ -17,8 +17,8 @@ def read_list(file):
 connected_clients = []
 
 cmd = "ss -ltupnr | grep localhost:"
-returned_output = subprocess.check_output(cmd, shell=True)
-
+result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+returned_output = result.stdout
 
 for client in returned_output.decode("utf-8").splitlines():
     if "[::]:" in client.split()[5]:
